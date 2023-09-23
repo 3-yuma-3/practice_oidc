@@ -1,0 +1,19 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: springboot-rp
+            client-secret: VXF2FCqMy80EBFjGbBPXAxg3RHD0qcKq
+            provider: keycloak
+            scope: openid
+            authorization-grant-type: authorization_code
+            redirect-uri: '{baseUrl}/login/oauth2/code/{registrationId}'
+        provider:
+          keycloak:
+            authorization-uri: http://localhost:8880/realms/springboot-rp/protocol/openid-connect/auth
+            token-uri: http://localhost:8880/realms/springboot-rp/protocol/openid-connect/token
+            user-info-uri: http://localhost:8880/realms/springboot-rp/protocol/openid-connect/userinfo
+            jwk-set-uri: http://localhost:8880/realms/springboot-rp/protocol/openid-connect/certs
+            user-name-attribute: preferred_username

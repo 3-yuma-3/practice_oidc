@@ -15,6 +15,9 @@ class CallbackController < ApplicationController
     not_before_policy = token_res["not-before-policy"]
     session_state = token_res["session_state"]
     scope = token_res["scope"]
+
+    verify_id_token!(id_token)
+    user_info = get_userinfo(access_token)
   end
 
   private
@@ -55,5 +58,41 @@ class CallbackController < ApplicationController
 
   def redirect_uri
     "http://localhost:3000/callback"
+  end
+
+  def verify_id_token!(id_token)
+    jwk_set = JSON::JWK::Set.new(self.jwks)
+    id_token = JSON::JWT.decode id_token, jwk_set
+    unless (
+      # id_token[:iss] == expected_iss &&
+      # id_token[:aud] == expected_aud &&
+      id_token[:sub].present? &&
+      # id_token[:nonce] == expected_nonce &&
+      Time.at(id_token[:iat]).between?(30.seconds.ago, Time.now) &&
+      Time.at(id_token[:exp]) > Time.now
+    )
+      raise 'ID Token Verification Failed!'
+    end
+  end
+
+  def jwks
+    res = Net::HTTP.get(URI.parse(jwk_endpoint))
+    JSON.parse(res)
+  end
+
+  def jwk_endpoint
+    "http://host.docker.internal:8880/realms/rails-rp/protocol/openid-connect/certs"
+  end
+
+  def get_userinfo(access_token)
+    res = Net::HTTP.get(
+      URI.parse(userinfo_endpoint),
+      { "Authorization" => "Bearer #{access_token}" }
+    )
+    JSON.parse(res)
+  end
+
+  def userinfo_endpoint
+    "http://host.docker.internal:8880/realms/rails-rp/protocol/openid-connect/userinfo"
   end
 end

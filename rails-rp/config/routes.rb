@@ -4,4 +4,6 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "top#index"
+
+  post "authorization", to: "authorization#create"
 end

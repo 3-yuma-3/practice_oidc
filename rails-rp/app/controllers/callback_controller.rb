@@ -18,6 +18,8 @@ class CallbackController < ApplicationController
 
     verify_id_token!(id_token)
     user_info = get_userinfo(access_token)
+
+    redirect_to controller: :userinfo, action: :index, params: user_info
   end
 
   private

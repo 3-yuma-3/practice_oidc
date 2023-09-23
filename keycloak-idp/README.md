@@ -15,3 +15,12 @@
 3. `http://localhost:8880` or `https://localhost:8443`
     - `Administration Console`
     - `Username or email`, `Password`: [compose.yml](./compose.yml) を参照
+
+## memo
+
+- realmとuserの作成
+    1. realm: rails-rp
+    2. user: rails-rp_user1, password: password
+    3. `http://localhost:8880/realms/rails-rp/account/#/`
+- rails-rpのrealmでoidc clientを作成
+  - `curl http://localhost:8880/realms/rails-rp/.well-known/openid-configuration | jq .`

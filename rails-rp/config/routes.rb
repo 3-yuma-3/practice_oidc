@@ -6,4 +6,5 @@ Rails.application.routes.draw do
   root "top#index"
 
   post "authorization", to: "authorization#create"
+  get "callback", to: "callback#exchange"
 end

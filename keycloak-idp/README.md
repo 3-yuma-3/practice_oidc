@@ -19,8 +19,12 @@
 ## memo
 
 - realmとuserの作成
-    1. realm: rails-rp
+    1. realm: rails-rp, springboot-rp
     2. user: rails-rp_user1, password: password
-    3. `http://localhost:8880/realms/rails-rp/account/#/`
+    3. user: springboot-rp_user1, password: password
+    4. `http://localhost:8880/realms/rails-rp/account/#/`
+    5. `http://localhost:8880/realms/springboot-rp/account/#/`
 - rails-rpのrealmでoidc clientを作成
   - `curl http://localhost:8880/realms/rails-rp/.well-known/openid-configuration | jq .`
+- springboot-rpのrealmでoidc clientを作成
+  - redirectURI: `http://localhost:8080/login/oauth2/code/keycloak`

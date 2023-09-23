@@ -1,0 +1,23 @@
+version: '3.9'
+services:
+  rails-rp:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+  rails-rp-mysql:
+    image: mysql:8.1.0
+    container_name: rails-rp-mysql
+    environment:
+      - MYSQL_DATABASE=rails_rp_development
+      - MYSQL_USER=rails
+      - MYSQL_PASSWORD=rails
+      - MYSQL_ROOT_PASSWORD=rails
+    volumes:
+      - rails-rp-mysql:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+volumes:
+  rails-rp-mysql:

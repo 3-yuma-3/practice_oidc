@@ -1,0 +1,39 @@
+version: '3.9'
+services:
+  keycloak-idp:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: keycloak-idp
+    tty: true
+    stdin_open: true
+    # user: "${UID}:${GID}"
+    ports:
+      - "8880:8080" # 開発モード (http)
+      - "8443:8443" # (https)
+    volumes:
+      - keycloak-idp:/opt/keycloak/data
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: password
+    depends_on:
+      - postgres
+    command:
+      - start-dev # 開発モード
+      # - start --optimized
+
+  postgres:
+      image: postgres:16
+      container_name: keycloak_postgres
+      volumes:
+        - keycloak_postgres:/var/lib/postgresql/data
+      ports:
+        - "5432:5432"
+      environment:
+        POSTGRES_DB: keycloak
+        POSTGRES_USER: keycloak
+        POSTGRES_PASSWORD: password
+
+volumes:
+  keycloak-idp:
+  keycloak_postgres:
